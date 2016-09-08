@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<style>
+*{ margin:0; padding:0; list-style:none;}
+body{ font-size:12px;}
+
+#menu{width:360px; overflow:hidden; margin:100px auto;border:1px solid #BF9660;}
+#menu #nav {display:block;width:100%;padding:0;margin:0;list-style:none;}
+#menu #nav li {width:120px;position: relative;}
+#menu #nav li a {text-decoration:none;display:block;line-height:27px;padding:0 0 0 5px; text-align:center; color:#333;height: 27px;}
+/*#menu #nav li a:hover .arrow{transform: rotate(180deg);transform-origin: 50% 30% 0;}*/
+#first_child{transform: rotate(180deg);transform-origin: 50% 30% 0;}
+#menu_con{ width:358px; height:135px; border-top:none}
+.tag{ padding:10px; overflow:hidden;}
+.selected{background:#C5A069; color:#fff;}
+.arrow{border-color: #333 transparent transparent;-webkit-transition: .2s ease-in; position: absolute;top: 10px;right: 6px;
+-moz-transition: -webkit-transform .2s ease-in; -o-transition: -webkit-transform .2s ease-in; transition: .2s ease-in;border-style: solid dashed dashed;border-width: 5px;
+font-size: 1px;height: 0px;}
+</style>
+</head>
+<body>
+
+<!--代码部分begin-->
+<div id="menu">
+<!--tag标题-->
+    <ul id="nav">
+        <li>
+        <a href="#" class="selected">js特效 <i class="arrow" id="first_child"></i></a>
+           
+            <div class="tag" style="display:block">
+                这里是js特效内容列表
+
+            </div> 
+        </li>
+        <li>
+            <a href="#" class="">tab切换<i class="arrow"></i></a>
+            <div class="tag" style="display:none">
+                这里是tab切换效果   
+            </div>
+        </li>
+        <li>
+            <a href="#" class="">菜单导航<i class="arrow"></i></a>
+            <div class="tag"  style="display:none">
+                这里是菜单导航效果
+            </div> 
+        </li>
+    </ul>
+
+</div>
+<script>
+var tabs = function(){
+    function tag(name,elem) {
+        return (elem||document).getElementsByTagName(name);
+    }
+    function id(name){
+        return document.getElementById(name);
+    }
+    function next(elem){
+        do{
+            elem=elem.nextSibling;  
+        }while(
+            elem&&elem.nodeType!=1  
+        )
+        return elem;
+    }
+    function parent(elem){
+        do{
+            elem=elem.parentNode;  
+        }while(
+            elem&&elem.nodeType!=1  
+        )
+        return elem;
+    }
+    function first(elem){
+        elem=elem.firstChild;
+        return elem&&elem.nodeType==1? elem:next(elem);
+    }
+    function rotate(target,classname){
+        var i = first(target);
+        if(target.className != classname){
+            i.style.transform = 'rotate(0deg)';
+            i.style.transformOrigin = '50% 30% 0';
+        }else{
+            i.style.transform = 'rotate(180deg)';
+            i.style.transformOrigin = '50% 30% 0';
+        }
+    }
+    function change(target,classname){
+        var div = next(target);
+        if(target.className == classname && div.style.display == 'block'){
+            target.className = ' ';
+            div.style.display = 'none';
+            rotate(target,classname);
+            }else{
+            target.className = classname;
+            div.style.display = 'block';
+            rotate(target,classname);
+        }
+    }
+    function judge(event,select,arrow){
+        var target = event.target;
+        switch (target.className){
+        case arrow:
+            target = parent(target);
+            change(target,select);
+            break;
+        default:
+            change(target,select);
+            break;
+        }
+    }
+    return {
+        set:function(elemId){
+            var li = tag('li',id(elemId));
+            for(var i = 0;i<li.length;i++){  
+                var a = tag('a',li[i]);   
+                var current = 0;   
+                a[0].onclick = function(event){ 
+                    judge(event,'selected','arrow');                    
+                    }
+                };
+            }
+        }
+    
+    }();
+tabs.set("nav");//执行
+
+</script>
+<!--代码部分end-->
+
+</body>
+</html>
